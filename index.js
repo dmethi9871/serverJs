@@ -10,13 +10,14 @@ app.use(cors());
 app.use(express.json());
 
 const pool = new Pool({
-  user: "postgres",
-  host: "db.fdmjedqpunfcbikixlix.supabase.co",
-  database: "postgres",
-  password: "pgadmin",
+  host: 'db.fdmjedqpunfcbikixlix.supabase.co',
   port: 5432,
+  user: 'youruser',
+  password: 'yourpassword',
+  database: 'yourdb',
+  ssl: { rejectUnauthorized: false }, // for Supabase
+  family: 4 // <--- this forces IPv4 usage
 });
-
 pool
   .connect()
   .then((client) => {
