@@ -1,23 +1,21 @@
 const express = require("express");
-
 const cors = require("cors");
 const { Pool } = require("pg");
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001; // Use Railway's PORT env var
 
 app.use(cors());
 app.use(express.json());
 
+// Hardcoded Supabase connection string
 const pool = new Pool({
-  user: "postgres",
-  host: "35.201.123.20",
-  database: "postgres",
-  password: "pgadmin",
-  port: 5432,
-  ssl: { rejectUnauthorized: false }, // for Supabase
-  family: 4
+  connectionString:
+    "postgresql://postgres.fdmjedqpunfcbikixlix:pgadmin@aws-0-ap-south-1.pooler.supabase.com:5432/postgres",
+  ssl: { rejectUnauthorized: false } // Required for Supabase
 });
+
+// Test database connection on startup
 pool
   .connect()
   .then((client) => {
@@ -36,8 +34,7 @@ pool
     console.error("Error acquiring client from pool:", err.stack);
   });
 
-// DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.fdmjedqpunfcbikixlix.supabase.co:5432/postgres
-
+// Your existing routes (unchanged)
 app.get("/api/products", async (req, res) => {
   try {
     const result = await pool.query(
